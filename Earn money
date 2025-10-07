@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src='//libtl.com/sdk.js' data-zone='10004301' data-sdk='show_10004301'></script>
   <meta charset="UTF-8">
   <title>Watch & Earn Mini App</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
