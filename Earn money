@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Watch & Earn Mini App</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      background: #0b0c10;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    h2 { color: #00ffdd; }
+    button {
+      background: #0088cc;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 16px;
+      border-radius: 12px;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover { background: #00aaff; }
+    #ad-box, #spin-box {
+      background: #1e1e1e;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 30px auto;
+      width: 90%;
+      max-width: 350px;
+      display: none;
+    }
+    #ad-box img { width: 100%; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h2>💰 Watch & Earn Mini App</h2>
+  <p id="balance">Balance: 0 coins</p>
+
+  <button id="watchAd">🎬 Watch Ad (+5 Coins)</button>
+  <button id="dailyReward">📅 Claim Daily Reward (+10 Coins)</button>
+  <button id="spinWheel">🎡 Spin the Wheel (+0-20 Coins)</button>
+
+  <!-- Ad Box -->
+  <div id="ad-box">
+    <p>Sponsored Ad</p>
+    <img src="https://via.placeholder.com/300x150.png?text=Your+Ad+Here" alt="Ad">
+    <button id="closeAd">✅ Done Watching</button>
+  </div>
+
+  <!-- Spin Wheel Box -->
+  <div id="spin-box">
+    <p>🎡 Spin Result:</p>
+    <p id="spin-result" style="font-size:20px;"></p>
+    <button id="closeSpin">✅ Close</button>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    let balance = 0;
+    let lastDaily = null;
+
+    const balanceDisplay = document.getElementById("balance");
+    const adBox = document.getElementById("ad-box");
+    const watchAdBtn = document.getElementById("watchAd");
+    const closeAdBtn = document.getElementById("closeAd");
+
+    const dailyBtn = document.getElementById("dailyReward");
+    const spinBtn = document.getElementById("spinWheel");
+    const spinBox = document.getElementById("spin-box");
+    const spinResult = document.getElementById("spin-result");
+    const closeSpin = document.getElementById("closeSpin");
+
+    function updateBalance() {
+      balanceDisplay.innerText = "Balance: " + balance + " coins";
+    }
+
+    // Watch Ad
+    watchAdBtn.addEventListener("click", () => {
+      watchAdBtn.style.display = "none";
+      adBox.style.display = "block";
+    });
+
+    closeAdBtn.addEventListener("click", () => {
+      adBox.style.display = "none";
+      watchAdBtn.style.display = "block";
+      balance += 5;
+      updateBalance();
+      tg.showAlert("You earned 5 coins!");
+    });
+
+    // Daily Reward
+    dailyBtn.addEventListener("click", () => {
+      const today = new Date().toDateString();
+      if (lastDaily !== today) {
+        balance += 10;
+        lastDaily = today;
+        updateBalance();
+        tg.showAlert("You claimed your daily 10 coins!");
+      } else {
+        tg.showAlert("Daily reward already claimed today!");
+      }
+    });
+
+    // Spin the Wheel
+    spinBtn.addEventListener("click", () => {
+      spinBtn.style.display = "none";
+      spinBox.style.display = "block";
+      const earned = Math.floor(Math.random() * 21); // 0-20 coins
+      balance += earned;
+      spinResult.innerText = `You won ${earned} coins!`;
+      updateBalance();
+    });
+
+    closeSpin.addEventListener("click", () => {
+      spinBox.style.display = "none";
+      spinBtn.style.display = "block";
+    });
+
+    updateBalance();
+  </script>
+</body>
+</html>
